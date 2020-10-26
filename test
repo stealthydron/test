@@ -1,0 +1,20 @@
+    @Test
+    public void addNewApp() throws Exception {
+        fullDate = rightNow.getInstance().getTime().toString();
+        todayDay = rightNow.getInstance().get(Calendar.DAY_OF_MONTH);
+        year = rightNow.getInstance().get(Calendar.YEAR);
+        todaysDayAndYear = todayDay + ", " + year;
+        LoginPage lp = new LoginPage(driver);
+        HomePage dashboardpage = lp.submitLogin(valid_email, valid_password);
+        assertNotNull(dashboardpage);
+        AppsPage appspage = new HomePage(driver).goToApps();
+        appspage.clickAddNewApp();
+        NetworksPage netwpage = appspage.addNewApp(fullDate);
+        appspage = netwpage.goToApps();
+        assertEquals(fullDate, appspage.getLastEntryName());
+        assertEquals("0", appspage.getLastEntryNetworks());
+        assertEquals("3", appspage.getLastEntryAdPlaces());
+        assertEquals("Android", appspage.getLastEntryPlatform());
+        assertTrue("Not contains", appspage.getLastEntryDate().contains(todaysDayAndYear));
+        appspage.makeScreenshot();
+    }
